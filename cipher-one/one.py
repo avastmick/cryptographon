@@ -7,6 +7,9 @@
 
 import argparse
 
+# Regenerate the hash, so know which version this is:
+# echo -n one.py | sha256sum
+VERSION = "1.0, 01-18-2018"
 # The length of the code per letter
 CODE_LEN = 4
 # A lookup of codes
@@ -56,16 +59,16 @@ def encode(_msg):
         
     print("Code: " + output)
 
-def decode(_msg):
+def decode(_code):
     """
     Decodes a given message
 
-    @param _msg: The code to decode
+    @param _code: The code to decode
     """
-    print("Decoding: \"" + _msg + "\"")
+    print("Decoding: \"" + _code + "\"")
     output = ""
     code = ""
-    for c in _msg:
+    for c in _code:
         if c == " ":
             output += c
             code = ""
@@ -78,12 +81,14 @@ def decode(_msg):
     print("Message: " + output)
 
 
-
-
 # Below this line is just stuff to make the program easier to use
 def find_key(val):
     """return the key of CODE dictionary given the value"""
     return [k for k, v in CODE.iteritems() if v == val][0]
+
+def get_hash():
+    """return the sha256 hash for this version and compare with that on commandline"""
+    print(VERSION)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Encodes or decodes secret messages")
@@ -91,10 +96,13 @@ if __name__ == '__main__':
                         help="States whether the message should be encoded or decoded",
                         choices=["encode", "decode"])
     parser.add_argument('message', help="The message to encode / decode, (must be in \"quotes\")")
+    parser.add_argument('-v', '--version', help="Returns the sha256 hash for this code", action='version', version=get_hash())
 
     args = parser.parse_args()
 
-    if args.action == "encode":
-        encode(args.message)
+    if args.action == "version":
+        get_hash()
     elif args.action == "decode":
         decode(args.message)
+    elif args.action == "encode":
+        encode(args.message)

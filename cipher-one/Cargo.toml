@@ -1,0 +1,9 @@
+[package]
+name = "cipher-one"
+version = "0.0.1"
+authors = ["avastmick <avastmick@outlook.com>"]
+
+[dependencies]
+argparse = "*"
+lazy_static = "*"
+maplit = "*"

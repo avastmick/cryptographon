@@ -12,4 +12,17 @@ So, I had an idea. They were very excited about their secrets and making it easi
 
 ## Step One
 
-Turning their cipher into code.
+Turning their cipher into code. You can see that here:
+
+- [Cipher One](cipher-one/README.md)
+
+## Step Two
+
+List out the problems. Think like spies:
+
+- How good is our first computer cipher?
+- And how would hackers attack it?
+
+The answers to these questions will lead us to the next stage:
+
+- [Cipher Two](cipher-two/README.md)

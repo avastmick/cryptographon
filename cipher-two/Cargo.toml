@@ -1,0 +1,6 @@
+[package]
+name = "cipher-two"
+version = "0.1.0"
+authors = ["avastmick <avastmick@outlook.com>"]
+
+[dependencies]

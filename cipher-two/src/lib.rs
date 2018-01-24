@@ -1,5 +1,7 @@
-#[macro_use] extern crate maplit; 
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate maplit;
 extern crate rand;
 
 use std::error::Error;
@@ -64,7 +66,7 @@ fn get_key(code: &String) -> String {
 fn get_code(key: String) -> String {
     let mut code = String::new();
     if CODES.contains_key(key.to_lowercase().as_str()) {
-        code.push_str(CODES.get(key.to_lowercase().as_str()).unwrap() );
+        code.push_str(CODES.get(key.to_lowercase().as_str()).unwrap());
     }
     code
 }
@@ -87,7 +89,7 @@ pub fn create_key(name: &str) -> String {
         // Need to check the key generated is unique, otherwise it will overwrite the value
         while !done {
             let genkey = get_rand_code();
-            if ! codes.contains_key(genkey.as_str()) {
+            if !codes.contains_key(genkey.as_str()) {
                 let key = String::from(genkey);
                 let val = alpha.chars().nth(x).unwrap();
                 codes.insert(key, val);
@@ -101,18 +103,13 @@ pub fn create_key(name: &str) -> String {
 
     // Open a file in write-only mode, returns `io::Result<File>`
     let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}",
-                           display,
-                           why.description()),
+        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
         Ok(file) => file,
     };
 
     // Write the `LOREM_IPSUM` string to `file`, returns `io::Result<()>`
     match file.write_all("Testing... Testing...".as_bytes()) {
-        Err(why) => {
-            panic!("couldn't write to {}: {}", display,
-                                               why.description())
-        },
+        Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
         Ok(_) => println!("successfully wrote to {}", display),
     }
 
@@ -124,13 +121,13 @@ pub fn create_key(name: &str) -> String {
 ///
 /// assert_eq!("11481249678067805698 10695698668367809533", encode("Hello World"));
 pub fn encode(_key: &str, msg: &str) -> String {
-
     let mut secret = String::new();
     // Iterate through the message
-    for c in msg.chars() { 
+    for c in msg.chars() {
         if c == ' ' {
             secret.push(c);
-        } else { // get code and add to secret
+        } else {
+            // get code and add to secret
             let mut key = String::new();
             key.push(c);
             secret += &get_code(key);
@@ -146,13 +143,14 @@ pub fn encode(_key: &str, msg: &str) -> String {
 ///
 /// assert_eq!("hello world", decode("11481249678067805698 10695698668367809533"));
 pub fn decode(_key: &str, secret: &str) -> String {
-    
     let mut msg = String::new();
     let mut code = String::new();
-    println!("
-    Got secret: {}", secret);
+    println!(
+        "
+    Got secret: {}",
+        secret
+    );
     for c in secret.chars() {
-
         if c != ' ' {
             code.push(c);
             // If we have the right length code
@@ -162,7 +160,8 @@ pub fn decode(_key: &str, secret: &str) -> String {
                 // Reset
                 code.clear();
             }
-        } else { // Ignore from code, but add to message
+        } else {
+            // Ignore from code, but add to message
             msg.push(c);
             // Reset
             code.clear();
@@ -175,19 +174,24 @@ pub fn decode(_key: &str, secret: &str) -> String {
 }
 
 pub fn usage() {
-    println!("
+    println!(
+        "
     **********************************************************
     Usage: cipher-one [-d] key message
         
             to decode, use \'-d\'
-    **********************************************************");
+    **********************************************************"
+    );
 }
 
 pub fn print_out(msg: String) {
-    println!("
+    println!(
+        "
     **********************************************************
     {}
-    **********************************************************", msg);
+    **********************************************************",
+        msg
+    );
 }
 
 #[cfg(test)]
@@ -199,10 +203,16 @@ mod tests {
     }
     #[test]
     fn test_encode() {
-        assert_eq!("11481249678067805698 10695698668367809533", encode("test-keycode", "Hello World"));
+        assert_eq!(
+            "11481249678067805698 10695698668367809533",
+            encode("test-keycode", "Hello World")
+        );
     }
     #[test]
     fn test_decode() {
-        assert_eq!("hello world", decode("test-keycode", "11481249678067805698 10695698668367809533"));
+        assert_eq!(
+            "hello world",
+            decode("test-keycode", "11481249678067805698 10695698668367809533")
+        );
     }
 }

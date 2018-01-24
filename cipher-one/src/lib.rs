@@ -1,5 +1,7 @@
-#[macro_use] extern crate maplit; 
-#[macro_use] extern crate lazy_static;
+#[macro_use]
+extern crate lazy_static;
+#[macro_use]
+extern crate maplit;
 
 use std::collections::HashMap;
 
@@ -52,7 +54,7 @@ fn get_key(code: &String) -> String {
 fn get_code(key: String) -> String {
     let mut code = String::new();
     if CODES.contains_key(key.to_lowercase().as_str()) {
-        code.push_str(CODES.get(key.to_lowercase().as_str()).unwrap() );
+        code.push_str(CODES.get(key.to_lowercase().as_str()).unwrap());
     }
     code
 }
@@ -61,13 +63,13 @@ fn get_code(key: String) -> String {
 ///
 /// assert_eq!("11481249678067805698 10695698668367809533", encode("Hello World"));
 pub fn encode(msg: &str) -> String {
-
     let mut secret = String::new();
     // Iterate through the message
-    for c in msg.chars() { 
+    for c in msg.chars() {
         if c == ' ' {
             secret.push(c);
-        } else { // get code and add to secret
+        } else {
+            // get code and add to secret
             let mut key = String::new();
             key.push(c);
             secret += &get_code(key);
@@ -83,13 +85,14 @@ pub fn encode(msg: &str) -> String {
 ///
 /// assert_eq!("hello world", decode("11481249678067805698 10695698668367809533"));
 pub fn decode(secret: &str) -> String {
-    
     let mut msg = String::new();
     let mut code = String::new();
-    println!("
-    Got secret: {}", secret);
+    println!(
+        "
+    Got secret: {}",
+        secret
+    );
     for c in secret.chars() {
-
         if c != ' ' {
             code.push(c);
             // If we have the right length code
@@ -99,7 +102,8 @@ pub fn decode(secret: &str) -> String {
                 // Reset
                 code.clear();
             }
-        } else { // Ignore from code, but add to message
+        } else {
+            // Ignore from code, but add to message
             msg.push(c);
             // Reset
             code.clear();
@@ -112,19 +116,24 @@ pub fn decode(secret: &str) -> String {
 }
 
 pub fn usage() {
-    println!("
+    println!(
+        "
     **********************************************************
     Usage: cipher-one [-d] message
         
             to decode, use \'-d\'
-    **********************************************************");
+    **********************************************************"
+    );
 }
 
 pub fn print_out(msg: String) {
-    println!("
+    println!(
+        "
     **********************************************************
     {}
-    **********************************************************", msg);
+    **********************************************************",
+        msg
+    );
 }
 
 #[cfg(test)]
@@ -132,10 +141,16 @@ mod tests {
     use super::*;
     #[test]
     fn test_encode() {
-        assert_eq!("11481249678067805698 10695698668367809533", encode("Hello World"));
+        assert_eq!(
+            "11481249678067805698 10695698668367809533",
+            encode("Hello World")
+        );
     }
     #[test]
     fn test_decode() {
-        assert_eq!("hello world", decode("11481249678067805698 10695698668367809533"));
+        assert_eq!(
+            "hello world",
+            decode("11481249678067805698 10695698668367809533")
+        );
     }
 }

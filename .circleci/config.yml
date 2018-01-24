@@ -36,7 +36,10 @@ jobs:
           command: rustup run stable cargo test --all
       - run:
           name: Upload Coverage
-          command: ./.scripts/codecov.sh
+          command: |
+            for file in target/debug/*-*[^\.d]; do mkdir -p "target/cov/$(basename $file)"; ./kcov-build/usr/local/bin/kcov --exclude-pattern=/.cargo,/usr/lib --verify "target/cov/$(basename $file)" "$file"; done &&
+            bash <(curl -s https://codecov.io/bash) &&
+            echo "Uploaded code coverage"
       - save_cache:
           key: project-cache
           paths:

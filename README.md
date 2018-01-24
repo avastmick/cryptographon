@@ -1,5 +1,7 @@
 # Cryptographon
 
+[![Build Status](https://circleci.com/gh/avastmick/cryptographon.svg?style=shield&circle-token=f40a3b3ae9fbb884696ec26209d862506805838d)](https://circleci.com/gh/avastmick/cryptographon) [![codecov](https://codecov.io/gh/avastmick/cryptographon/branch/develop/graph/badge.svg)](https://codecov.io/gh/avastmick/cryptographon)
+
 **What is this?**
 
 It's a set of code examples and games to show kids (or adults) the principles behind cryptography.

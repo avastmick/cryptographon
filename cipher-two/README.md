@@ -19,4 +19,9 @@ Let's split this out.
  1. The message needs to be secure - we'll get back to this, but for now let's say our code is good enough.
  1. The means of encoding the message needs to be unique to two parties - we need to work on this.
 
-How can we do this.
+How can we do this?
+
+- Change ``cipher-one`` to create a key (CODE) based on specification of ``cipher-one``
+- Give each new key (CODE) a name, based on a pair of recipients
+- Allow the import of keys (CODE) as a param
+- After this it works as ``cipher-one``

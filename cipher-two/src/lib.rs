@@ -130,11 +130,13 @@ pub fn encode(_key: &str, msg: &str) -> String {
             // get code and add to secret
             let mut key = String::new();
             key.push(c);
-            secret += &get_code(key);
+            let codeval = &get_code(key);
+            if codeval.trim() == "" {
+                secret = String::from("Encoding failed! Please use only alphabetical values!");
+                break;
+            }
+            secret += codeval;
         }
-    }
-    if secret.trim() == "" {
-        secret += "Encoding failed! Please use on alphabetical values!";
     }
     secret
 }
@@ -156,6 +158,11 @@ pub fn decode(_key: &str, secret: &str) -> String {
             // If we have the right length code
             if code.len() == CODE_LEN {
                 // Look up the key from value
+                let keyval = &get_key(&code);
+                if keyval.trim() == "" {
+                    msg = String::from("Nothing to decode. Bad code!");
+                    break;
+                }
                 msg += &get_key(&code);
                 // Reset
                 code.clear();
@@ -166,9 +173,6 @@ pub fn decode(_key: &str, secret: &str) -> String {
             // Reset
             code.clear();
         }
-    }
-    if msg.trim() == "" {
-        msg += "Nothing to decode. Bad code!";
     }
     msg
 }
@@ -208,11 +212,27 @@ mod tests {
             encode("test-keycode", "Hello World")
         );
     }
+    // Should fail if non-alphabetical values are given
+    #[test]
+    fn test_bad_encode() {
+        assert_eq!(
+            "Encoding failed! Please use only alphabetical values!",
+            encode("test-keycode", "Some garbage like aswqer qr2r232!@")
+        );
+    }
     #[test]
     fn test_decode() {
         assert_eq!(
             "hello world",
             decode("test-keycode", "11481249678067805698 10695698668367809533")
+        );
+    }
+    // Should fail if non-code entered
+    #[test]
+    fn test_bad_decode() {
+        assert_eq!(
+            "Nothing to decode. Bad code!",
+            decode("test-keycode", "123817247 123487129471100 12341281")
         );
     }
 }

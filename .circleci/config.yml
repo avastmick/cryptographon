@@ -6,8 +6,6 @@ jobs:
     docker:
       - image: python:latest
     environment:
-      # Set your codecov token if your repository is private.
-      CODECOV_TOKEN: f2aab8df-c688-42f0-8ba0-2218d120ffbe
       TZ: "/usr/share/zoneinfo/Asia/Shanghai"
     steps:
       - checkout
@@ -18,7 +16,6 @@ jobs:
           command: |
             pip install tox
             tox
-            codecov --token=f2aab8df-c688-42f0-8ba0-2218d120ffbe
       - save_cache:
           key: py-project-cache
           paths:

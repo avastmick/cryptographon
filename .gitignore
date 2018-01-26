@@ -5,3 +5,9 @@ Cargo.lock
 **/*.rs.bk
 test-*
 .codecov
+.coverage
+
+*.pyc
+__pycache__
+.hypothesis
+.cache

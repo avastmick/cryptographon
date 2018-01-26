@@ -42,6 +42,12 @@ CODE = {
     "z" : "9900"
 }
 
+class EncodingException(Exception):
+    """Raise when bad values are passed for encoding"""
+
+
+class DecodingException(Exception):
+    """Raise when bad values are passed for encoding"""
 
 def encode(_msg):
     """
@@ -54,10 +60,12 @@ def encode(_msg):
     for c in _msg:
         if c.lower() in CODE:
             output += CODE[c.lower()] 
-        else:
+        elif c == ' ':
             output += ' '
+        else:
+            raise EncodingException("Encoding failed! Please use only alphabetical values!")
         
-    print("Code: " + output)
+    return output
 
 def decode(_code):
     """
@@ -77,14 +85,20 @@ def decode(_code):
             if len(code) == 4:
                 output += find_key(code)
                 code = ""
-
-    print("Message: " + output)
+    return output
 
 
 # Below this line is just stuff to make the program easier to use
 def find_key(val):
     """return the key of CODE dictionary given the value"""
-    return [k for k, v in CODE.iteritems() if v == val][0]
+    key = ""
+    for k, v in CODE.iteritems():
+        if v == val:
+            key = k
+    if key == "":
+        raise DecodingException("Nothing to decode. Bad code!")
+    else:
+        return key
 
 def get_hash():
     """return the sha256 hash for this version and compare with that on commandline"""
@@ -103,6 +117,6 @@ if __name__ == '__main__':
     if args.action == "version":
         get_hash()
     elif args.action == "decode":
-        decode(args.message)
+        print("Message: " + decode(args.message))
     elif args.action == "encode":
-        encode(args.message)
+        print("Code: " + encode(args.message))

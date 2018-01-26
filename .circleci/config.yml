@@ -12,7 +12,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: project-cache
+          key: py-project-cache
       - run:
           name: Run Tox, to test and create coverage report
           command: |
@@ -23,6 +23,10 @@ jobs:
           command: |
             bash <(curl -s https://codecov.io/bash) &&
             echo "Uploaded code coverage"
+      - save_cache:
+          key: py-project-cache
+          paths:
+            - "~/.tox/dist"
   # Rust job
   build-rust:
     docker:
@@ -34,7 +38,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: project-cache
+          key: rust-project-cache
       - run:
           name: Check formatting
           command: |
@@ -62,7 +66,7 @@ jobs:
             bash <(curl -s https://codecov.io/bash) &&
             echo "Uploaded code coverage"
       - save_cache:
-          key: project-cache
+          key: rust-project-cache
           paths:
             - "~/.cargo"
             - "./target"

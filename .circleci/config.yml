@@ -66,3 +66,10 @@ jobs:
           paths:
             - "~/.cargo"
             - "./target"
+# Enable Workflow
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build-python
+      - build-rust

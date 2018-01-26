@@ -6,6 +6,7 @@ Cargo.lock
 test-*
 .codecov
 .coverage
+coverage.xml
 
 *.pyc
 __pycache__

@@ -18,7 +18,7 @@ jobs:
           command: |
             pip install tox
             tox
-            codecov -t $CODECOV_TOKEN
+            codecov
       - save_cache:
           key: py-project-cache
           paths:

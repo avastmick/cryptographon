@@ -9,7 +9,7 @@ import argparse
 
 # Regenerate the hash, so know which version this is:
 # echo -n one.py | sha256sum
-VERSION = "1.0, 01-18-2018"
+VERSION = "1.1, 01-18-2018"
 # The length of the code per letter
 CODE_LEN = 4
 # A lookup of codes
@@ -101,7 +101,7 @@ def find_key(val):
         return key
 
 def get_hash():
-    """return the sha256 hash for this version and compare with that on commandline"""
+    """WARNING! THIS HAS NOT CHANGED SINCE cipher-one"""
     print(VERSION)
 
 if __name__ == '__main__':

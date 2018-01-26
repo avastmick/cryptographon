@@ -7,7 +7,7 @@ jobs:
       - image: python:latest
     environment:
       # Set your codecov token if your repository is private.
-      : f2aab8df-c688-42f0-8ba0-2218d120ffbe
+      CODECOV_TOKEN: f2aab8df-c688-42f0-8ba0-2218d120ffbe
       TZ: "/usr/share/zoneinfo/Asia/Shanghai"
     steps:
       - checkout

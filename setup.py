@@ -11,13 +11,13 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='cryptographon',
-    version='0.0.1', 
+    version='0.0.1',
     description='A sample Python project',
     long_description=long_description,
-    url='https://github.com/avastmick/cryptographon',  
+    url='https://github.com/avastmick/cryptographon',
     author='avastmick',
     author_email='avastmick@outlook.com',
-    classifiers=[  
+    classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
         #   4 - Beta
@@ -51,7 +51,7 @@ setup(
     #
     #   py_modules=["my_module"],
     #
-    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'target', 'src']),  
+    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'target', 'src']),
     # extras_require={  # Optional
     #     'dev': ['check-manifest'],
     #     'test': ['coverage'],

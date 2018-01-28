@@ -2,6 +2,8 @@
 extern crate lazy_static;
 #[macro_use]
 extern crate maplit;
+extern crate serde_json;
+
 extern crate rand;
 
 use std::error::Error;
@@ -51,7 +53,7 @@ lazy_static! {
 }
 
 /// Gets the key (the source character) for a given cipher text code
-fn get_key(code: &String) -> String {
+fn get_key_char(code: &String) -> String {
     let mut key = String::new();
 
     for (_key, val) in CODES.iter() {
@@ -79,12 +81,13 @@ fn get_rand_code() -> String {
     String::from(key)
 }
 
-/// Creates a new key (CODE) for the given name
+/// Creates a new key (CODE) file for the given name
 pub fn create_key(name: &str) -> String {
     let alpha = "abcdefghijklmnopqrstuvwxyz";
+    // #[derive(Serialize, Deserialize)]
     let mut codes = HashMap::new();
 
-    for x in 0..25 {
+    for x in 0..26 {
         let mut done = false;
         // Need to check the key generated is unique, otherwise it will overwrite the value
         while !done {
@@ -97,6 +100,8 @@ pub fn create_key(name: &str) -> String {
             }
         }
     }
+
+    // TODO: Into function 
     let _path = [name, "-keycode"].join("");
     let path = Path::new(_path.as_str());
     let display = path.display();
@@ -107,11 +112,13 @@ pub fn create_key(name: &str) -> String {
         Ok(file) => file,
     };
 
-    // Write the `LOREM_IPSUM` string to `file`, returns `io::Result<()>`
-    match file.write_all("Testing... Testing...".as_bytes()) {
+    let j = serde_json::ser::to_string_pretty(&codes);
+
+    match file.write_all(j.unwrap().as_bytes()) {
         Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
         Ok(_) => println!("successfully wrote to {}", display),
     }
+    // TODO: End
 
     // Return path to new file
     String::from(path.file_name().unwrap().to_str().unwrap())
@@ -158,12 +165,12 @@ pub fn decode(_key: &str, secret: &str) -> String {
             // If we have the right length code
             if code.len() == CODE_LEN {
                 // Look up the key from value
-                let keyval = &get_key(&code);
+                let keyval = &get_key_char(&code);
                 if keyval.trim() == "" {
                     msg = String::from("Nothing to decode. Bad code!");
                     break;
                 }
-                msg += &get_key(&code);
+                msg += &get_key_char(&code);
                 // Reset
                 code.clear();
             }

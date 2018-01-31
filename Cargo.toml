@@ -1,0 +1,11 @@
+[package]
+name = "cryptographon"
+version = "0.1.0"
+authors = ["avastmick <avastmick@outlook.com>"]
+
+[dependencies]
+
+cipher-one = { path = "cipher-one" }
+cipher-two = { path = "cipher-two" }
+
+[workspace]

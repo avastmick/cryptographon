@@ -1,3 +1,17 @@
 target
 **/*.rs.bk
 Cargo.lock
+/target/
+**/*.rs.bk
+test-*
+.codecov
+.coverage
+coverage.xml
+
+*.pyc
+__pycache__
+.pytest*
+.hypothesis
+.cache
+.tox
+*.egg*

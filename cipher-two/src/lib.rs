@@ -101,7 +101,7 @@ pub fn create_key(name: &str) -> String {
         }
     }
 
-    // TODO: Into function 
+    // TODO: Into function
     let _path = [name, "-keycode"].join("");
     let path = Path::new(_path.as_str());
     let display = path.display();
@@ -214,7 +214,8 @@ mod tests {
     }
     #[test]
     fn test_encode() {
-        assert_eq!( // Needs to be set to 49833908109710973108 37523108735910971498
+        assert_eq!(
+            // Needs to be set to 49833908109710973108 37523108735910971498
             "11481249678067805698 10695698668367809533",
             encode("test_keycode", "Hello World")
         );
@@ -229,7 +230,8 @@ mod tests {
     }
     #[test]
     fn test_decode() {
-        assert_eq!( // Needs to decode 49833908109710973108 37523108735910971498
+        assert_eq!(
+            // Needs to decode 49833908109710973108 37523108735910971498
             "hello world",
             decode("test_keycode", "11481249678067805698 10695698668367809533")
         );

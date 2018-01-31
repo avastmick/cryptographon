@@ -51,9 +51,17 @@ setup(
     #
     #   py_modules=["my_module"],
     #
+<<<<<<< HEAD
     packages=find_packages(exclude=['contrib', 'docs', 'tests', 'target', 'src']),
+=======
+    packages=find_packages(exclude=['contrib', 'docs', 'tests', 'target', 'src']),  
+>>>>>>> 7459b95bc0b9f05210f0c4cccb1fd4a004b4458e
     # extras_require={  # Optional
     #     'dev': ['check-manifest'],
     #     'test': ['coverage'],
     # },
+<<<<<<< HEAD
 )
+=======
+)
+>>>>>>> 7459b95bc0b9f05210f0c4cccb1fd4a004b4458e

@@ -1,4 +1,5 @@
 target
+docs
 **/*.rs.bk
 Cargo.lock
 /target/
@@ -7,7 +8,6 @@ test-*
 .codecov
 .coverage
 coverage.xml
-
 *.pyc
 __pycache__
 .pytest*

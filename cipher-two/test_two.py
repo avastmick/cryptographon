@@ -6,31 +6,31 @@ def test_version():
     """Tests the version"""
     assert two.get_version() == "1.2, 01-29-2018"
 
-def test_keyfile_create():
+def test_create_key_file():
     """Tests the creation of a new keycode file"""
-    assert two.create_key_file("test") == "test_keycode"
+    assert two.create_key_file("test-two") == "test-two_keycode"
 
 def test_encode():
     """Tests the two.encode function"""
-    assert two.encode("test_two_keycode", "Hello World") == "11481249678067805698 10695698668367809533"
+    assert two.encode("test_keycode", "Hello World") == "49833908109710973108 37523108735910971498"
 
 def test_bad_encode():
     """Tests for bad input"""
     with pytest.raises(two.EncodingException) as e_info:
-        two.encode("test_two_keycode", "1234")
+        two.encode("test_keycode", "1234")
 
 def test_decode():
     """Tests the two.decode() function - going to two ways."""
-    assert two.decode("test_two_keycode", two.encode("test_two_keycode", "Hello World")) == "hello world"
+    assert two.decode("test_keycode", two.encode("test_keycode", "Hello World")) == "hello world"
 
 def test_bad_decode():
     """Tests for bad input"""
     with pytest.raises(two.DecodingException) as e_info:
-        two.decode("test_two_keycode", "1234 5678 9012")
+        two.decode("test_keycode", "1234 5678 9012")
 
 def test_bad_key_file():
     """Tests for no encryption key found"""
     with pytest.raises(two.KeyFileNotFoundException) as e_info:
-        two.decode("wrong_keycode", "11481249678067805698 10695698668367809533")
+        two.decode("wrong_keycode", "49833908109710973108 37523108735910971498")
     with pytest.raises(two.KeyFileNotFoundException) as e_info:
         two.encode("wrong_keycode", "Hello World")

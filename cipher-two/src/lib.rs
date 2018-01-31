@@ -210,13 +210,13 @@ mod tests {
     use super::*;
     #[test]
     fn test_create_key() {
-        assert_eq!("test-keycode", create_key("test"));
+        assert_eq!("test-two-keycode", create_key("test-two"));
     }
     #[test]
     fn test_encode() {
-        assert_eq!(
+        assert_eq!( // Needs to be set to 49833908109710973108 37523108735910971498
             "11481249678067805698 10695698668367809533",
-            encode("test-keycode", "Hello World")
+            encode("test_keycode", "Hello World")
         );
     }
     // Should fail if non-alphabetical values are given
@@ -224,14 +224,14 @@ mod tests {
     fn test_bad_encode() {
         assert_eq!(
             "Encoding failed! Please use only alphabetical values!",
-            encode("test-keycode", "Some garbage like aswqer qr2r232!@")
+            encode("test_keycode", "Some garbage like aswqer qr2r232!@")
         );
     }
     #[test]
     fn test_decode() {
-        assert_eq!(
+        assert_eq!( // Needs to decode 49833908109710973108 37523108735910971498
             "hello world",
-            decode("test-keycode", "11481249678067805698 10695698668367809533")
+            decode("test_keycode", "11481249678067805698 10695698668367809533")
         );
     }
     // Should fail if non-code entered
@@ -239,7 +239,7 @@ mod tests {
     fn test_bad_decode() {
         assert_eq!(
             "Nothing to decode. Bad code!",
-            decode("test-keycode", "123817247 123487129471100 12341281")
+            decode("test_keycode", "123817247 123487129471100 12341281")
         );
     }
 }

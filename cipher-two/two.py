@@ -6,41 +6,14 @@
 # Interate through the message changing the letters to code, or vice-versa
 
 import argparse
+import json
+import os
 
 # Regenerate the hash, so know which version this is:
 # echo -n one.py | sha256sum
-VERSION = "1.1, 01-18-2018"
+VERSION = "1.2, 01-29-2018"
 # The length of the code per letter
 CODE_LEN = 4
-# A lookup of codes
-CODE = {
-    "a" : "6520",
-    "b" : "2143",
-    "c" : "3990",
-    "d" : "9533",
-    "e" : "1249",
-    "f" : "8942",
-    "g" : "1043",
-    "h" : "1148",
-    "i" : "2397",
-    "j" : "7753",
-    "k" : "6521",
-    "l" : "6780",
-    "m" : "0067",
-    "n" : "1258",
-    "o" : "5698",
-    "p" : "9901",
-    "q" : "9806",
-    "r" : "6683",
-    "s" : "6799",
-    "t" : "5320",
-    "u" : "3118",
-    "v" : "2679",
-    "w" : "1069",
-    "x" : "9001",
-    "y" : "5477",
-    "z" : "9900"
-}
 
 class EncodingException(Exception):
     """Raise when bad values are passed for encoding"""
@@ -49,50 +22,65 @@ class EncodingException(Exception):
 class DecodingException(Exception):
     """Raise when bad values are passed for encoding"""
 
-def encode(_msg):
+class KeyFileNotFoundException(Exception):
+    """Raise when no encryption key file found"""
+
+def read_key_file(_keyfile):
+    """Reads an encryption file for look up"""
+    if os.path.isfile(_keyfile):
+        with open(_keyfile) as _keycodes:
+            key_codes = json.load(_keycodes)
+    else:
+        raise KeyFileNotFoundException("No encryption key file found. Cannot proceed.")
+
+    return key_codes
+
+def encode(_keyfile, _msg):
     """
     Encodes a given message
 
     @param _msg: The message to encode
     """
+    key_codes = read_key_file(_keyfile)
     print("Encoding: \"" + _msg + "\"")
     output = ""
     for c in _msg:
-        if c.lower() in CODE:
-            output += CODE[c.lower()] 
+        if c.lower() in key_codes:
+            output += key_codes[c.lower()]
         elif c == ' ':
             output += ' '
         else:
             raise EncodingException("Encoding failed! Please use only alphabetical values!")
-        
+
     return output
 
-def decode(_code):
+def decode(_keyfile, _secret):
     """
     Decodes a given message
 
-    @param _code: The code to decode
+    @param _secret: The code to decode
     """
-    print("Decoding: \"" + _code + "\"")
+    print("Decoding: \"" + _secret + "\"")
     output = ""
     code = ""
-    for c in _code:
+    for c in _secret:
         if c == " ":
             output += c
             code = ""
         elif len(code) < 4:
             code += c
             if len(code) == 4:
-                output += find_key(code)
+                output += find_key(_keyfile, code)
                 code = ""
     return output
 
 
 # Below this line is just stuff to make the program easier to use
-def find_key(val):
+def find_key(_keyfile, val):
     """return the key of CODE dictionary given the value"""
+    key_codes = read_key_file(_keyfile)
     key = ""
-    for k, v in CODE.items():
+    for k, v in key_codes.items():
         if v == val:
             key = k
     if key == "":
@@ -109,6 +97,7 @@ if __name__ == '__main__':
     parser.add_argument('action',
                         help="States whether the message should be encoded or decoded",
                         choices=["encode", "decode"])
+    parser.add_argument('keyfile', help="The encryption key file to use")
     parser.add_argument('message', help="The message to encode / decode, (must be in \"quotes\")")
     parser.add_argument('-v', '--version', help="Returns the sha256 hash for this code", action='version', version=get_hash())
 
@@ -117,6 +106,6 @@ if __name__ == '__main__':
     if args.action == "version":
         get_hash()
     elif args.action == "decode":
-        print("Message: " + decode(args.message))
+        print("Message: " + decode(args.keyfile, args.message))
     elif args.action == "encode":
-        print("Code: " + encode(args.message))
+        print("Code: " + encode(args.keyfile, args.message))

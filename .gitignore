@@ -10,6 +10,7 @@ coverage.xml
 
 *.pyc
 __pycache__
+.pytest*
 .hypothesis
 .cache
 .tox

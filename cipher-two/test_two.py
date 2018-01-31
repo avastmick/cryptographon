@@ -2,6 +2,14 @@
 import two
 import pytest
 
+def test_version():
+    """Tests the version"""
+    assert two.get_version() == "1.2, 01-29-2018"
+
+def test_keyfile_create():
+    """Tests the creation of a new keycode file"""
+    assert two.create_key_file("test") == "test_keycode"
+
 def test_encode():
     """Tests the two.encode function"""
     assert two.encode("test_two_keycode", "Hello World") == "11481249678067805698 10695698668367809533"

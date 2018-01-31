@@ -4,6 +4,7 @@ Cargo.lock
 /target/
 **/*.rs.bk
 test-*
+test_keycode
 .codecov
 .coverage
 coverage.xml

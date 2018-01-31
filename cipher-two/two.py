@@ -8,6 +8,7 @@
 import argparse
 import json
 import os
+import random
 
 # Regenerate the hash, so know which version this is:
 # echo -n one.py | sha256sum
@@ -17,7 +18,6 @@ CODE_LEN = 4
 
 class EncodingException(Exception):
     """Raise when bad values are passed for encoding"""
-
 
 class DecodingException(Exception):
     """Raise when bad values are passed for encoding"""
@@ -34,6 +34,19 @@ def read_key_file(_keyfile):
         raise KeyFileNotFoundException("No encryption key file found. Cannot proceed.")
 
     return key_codes
+
+def create_key_file(_keyfile):
+    """Creates a new key file - note there is NO checking for collisions!!!"""
+    alpha = "abcdefghijklmnopqrstuvwxyz"
+
+    # Create new codes, each with an alpha key
+    codes = {c: ''.join(map(str, random.sample(range(10), 4))) for c in alpha}
+
+    new_keyfile = _keyfile + "_keycode"
+    keyfile = open(new_keyfile, "w")
+    keyfile.write(json.dumps(codes))
+
+    return new_keyfile
 
 def encode(_keyfile, _msg):
     """
@@ -74,7 +87,6 @@ def decode(_keyfile, _secret):
                 code = ""
     return output
 
-
 # Below this line is just stuff to make the program easier to use
 def find_key(_keyfile, val):
     """return the key of CODE dictionary given the value"""
@@ -88,24 +100,25 @@ def find_key(_keyfile, val):
     else:
         return key
 
-def get_hash():
-    """WARNING! THIS HAS NOT CHANGED SINCE cipher-one"""
-    print(VERSION)
+def get_version():
+    """Print the version of the code"""
+    return VERSION
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Encodes or decodes secret messages")
     parser.add_argument('action',
-                        help="States whether the message should be encoded or decoded",
-                        choices=["encode", "decode"])
-    parser.add_argument('keyfile', help="The encryption key file to use")
-    parser.add_argument('message', help="The message to encode / decode, (must be in \"quotes\")")
-    parser.add_argument('-v', '--version', help="Returns the sha256 hash for this code", action='version', version=get_hash())
+                        help="States whether the message should be encoded or decoded, or whether a key should be created.",
+                        choices=["encode", "decode", "new"])
+    parser.add_argument('keyfile', help="The encryption key file to use, or the name of a new key file (e.g. alice-bob)")
+    parser.add_argument('message', nargs='?', help="The message to encode / decode, (must be in \"quotes\")")
+    parser.add_argument('-v', '--version', help="Returns the sha256 hash for this code", action='version', version=get_version())
 
     args = parser.parse_args()
-
     if args.action == "version":
-        get_hash()
+        print(get_version())
     elif args.action == "decode":
         print("Message: " + decode(args.keyfile, args.message))
     elif args.action == "encode":
         print("Code: " + encode(args.keyfile, args.message))
+    elif args.action == "new":
+        print("New keycode file: " + create_key_file(args.keyfile))

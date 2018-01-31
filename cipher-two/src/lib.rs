@@ -1,77 +1,15 @@
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate maplit;
-extern crate serde_json;
-
 extern crate rand;
+extern crate serde_json;
 
 use std::error::Error;
 use std::io::prelude::*;
 use std::fs::File;
 use std::path::Path;
 use std::collections::HashMap;
+use std::collections::HashSet;
 use rand::{thread_rng, Rng};
 
 const CODE_LEN: usize = 4;
-
-// TODO: Refactor this to replaced with an imported 'key'
-//  Need:
-//      - A key location (param)
-//      - A key specification (the cipher-one code with new codes)
-//      - A key generator (name pairs) to new file
-//      - Reverse the key and value - the key is the code
-lazy_static! {
-    static ref CODES: HashMap<&'static str, &'static str> = hashmap!{
-        "a" => "6520",
-        "b" => "2143",
-        "c" => "3990",
-        "d" => "9533",
-        "e" => "1249",
-        "f" => "8942",
-        "g" => "1043",
-        "h" => "1148",
-        "i" => "2397",
-        "j" => "7753",
-        "k" => "6521",
-        "l" => "6780",
-        "m" => "0067",
-        "n" => "1258",
-        "o" => "5698",
-        "p" => "9901",
-        "q" => "9806",
-        "r" => "6683",
-        "s" => "6799",
-        "t" => "5320",
-        "u" => "3118",
-        "v" => "2679",
-        "w" => "1069",
-        "x" => "9001",
-        "y" => "5477",
-        "z" => "9900"
-    };
-}
-
-/// Gets the key (the source character) for a given cipher text code
-fn get_key_char(code: &String) -> String {
-    let mut key = String::new();
-
-    for (_key, val) in CODES.iter() {
-        if val == &code {
-            key.push_str(_key);
-        }
-    }
-    key
-}
-
-/// Get the code for a given key (source character)
-fn get_code(key: String) -> String {
-    let mut code = String::new();
-    if CODES.contains_key(key.to_lowercase().as_str()) {
-        code.push_str(CODES.get(key.to_lowercase().as_str()).unwrap());
-    }
-    code
-}
 
 fn get_rand_code() -> String {
     let mut rng = thread_rng();
@@ -82,67 +20,80 @@ fn get_rand_code() -> String {
 }
 
 /// Creates a new key (CODE) file for the given name
-pub fn create_key(name: &str) -> String {
+pub fn create_keyfile(name: &str) -> String {
     let alpha = "abcdefghijklmnopqrstuvwxyz";
-    // #[derive(Serialize, Deserialize)]
-    let mut codes = HashMap::new();
-
-    for x in 0..26 {
-        let mut done = false;
-        // Need to check the key generated is unique, otherwise it will overwrite the value
-        while !done {
-            let genkey = get_rand_code();
-            if !codes.contains_key(genkey.as_str()) {
-                let key = String::from(genkey);
-                let val = alpha.chars().nth(x).unwrap();
-                codes.insert(key, val);
-                done = true;
-            }
+    let mut keycodes = HashMap::new();
+    let mut codes = HashSet::new();
+    let mut count = 0;
+    while count < alpha.len() {
+        // Loop here and check for collisions
+        let gencode = get_rand_code();
+        if !codes.contains(&gencode) {
+            codes.insert(gencode.to_string());
+            let key = alpha.chars().nth(count).unwrap().to_string();
+            keycodes.insert(key, gencode.to_string());
+            count += 1;
         }
     }
-
-    // TODO: Into function
-    let _path = [name, "-keycode"].join("");
+    // Create filepath
+    let _path = [name, "_keycode"].join("");
     let path = Path::new(_path.as_str());
     let display = path.display();
 
     // Open a file in write-only mode, returns `io::Result<File>`
     let mut file = match File::create(&path) {
-        Err(why) => panic!("couldn't create {}: {}", display, why.description()),
+        Err(why) => panic!("Couldn't create {}: {}", display, why.description()),
         Ok(file) => file,
     };
-
-    let j = serde_json::ser::to_string_pretty(&codes);
+    // JSON serialisation
+    let j = serde_json::ser::to_string_pretty(&keycodes);
 
     match file.write_all(j.unwrap().as_bytes()) {
-        Err(why) => panic!("couldn't write to {}: {}", display, why.description()),
-        Ok(_) => println!("successfully wrote to {}", display),
+        Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
+        Ok(_) => println!("Successfully wrote to {}", display),
     }
-    // TODO: End
-
     // Return path to new file
     String::from(path.file_name().unwrap().to_str().unwrap())
+}
+
+/// Gets a keyfile for a given filename
+pub fn get_keyfile(filename: &str) -> HashMap<String, String> {
+    println!("Getting keyfile for {}", filename);
+    let mut f = File::open(filename).expect("File not found");
+
+    let mut contents = String::new();
+    f.read_to_string(&mut contents)
+        .expect("Something went wrong reading the file");
+
+    let json = serde_json::from_str(&contents);
+    let keycodes: HashMap<String, String> = json.unwrap();
+
+    keycodes
 }
 
 /// Encode the given message
 ///
 /// assert_eq!("11481249678067805698 10695698668367809533", encode("Hello World"));
-pub fn encode(_key: &str, msg: &str) -> String {
+pub fn encode(keyfilename: &str, msg: &str) -> String {
     let mut secret = String::new();
+    let keycodes = get_keyfile(keyfilename);
     // Iterate through the message
     for c in msg.chars() {
-        if c == ' ' {
+        if c.is_whitespace() {
             secret.push(c);
         } else {
             // get code and add to secret
             let mut key = String::new();
             key.push(c);
-            let codeval = &get_code(key);
-            if codeval.trim() == "" {
+            let mut code = String::new();
+            if keycodes.contains_key(key.to_lowercase().as_str()) {
+                code.push_str(keycodes.get(key.to_lowercase().as_str()).unwrap());
+            }
+            if code.trim() == "" {
                 secret = String::from("Encoding failed! Please use only alphabetical values!");
                 break;
             }
-            secret += codeval;
+            secret += code.as_str();
         }
     }
     secret
@@ -151,26 +102,32 @@ pub fn encode(_key: &str, msg: &str) -> String {
 /// Decode the given message
 ///
 /// assert_eq!("hello world", decode("11481249678067805698 10695698668367809533"));
-pub fn decode(_key: &str, secret: &str) -> String {
+pub fn decode(keyfilename: &str, secret: &str) -> String {
     let mut msg = String::new();
     let mut code = String::new();
+    let keycodes = get_keyfile(keyfilename);
     println!(
         "
     Got secret: {}",
         secret
     );
     for c in secret.chars() {
-        if c != ' ' {
+        if !c.is_whitespace() {
             code.push(c);
             // If we have the right length code
             if code.len() == CODE_LEN {
                 // Look up the key from value
-                let keyval = &get_key_char(&code);
-                if keyval.trim() == "" {
+                let mut key = String::new();
+                for (_key, val) in keycodes.iter() {
+                    if val == &code {
+                        key.push_str(_key);
+                    }
+                }
+                if key.trim() == "" {
                     msg = String::from("Nothing to decode. Bad code!");
                     break;
                 }
-                msg += &get_key_char(&code);
+                msg += key.as_str();
                 // Reset
                 code.clear();
             }
@@ -209,14 +166,13 @@ pub fn print_out(msg: String) {
 mod tests {
     use super::*;
     #[test]
-    fn test_create_key() {
-        assert_eq!("test-two-keycode", create_key("test-two"));
+    fn test_create_keyfile() {
+        assert_eq!("test-two_keycode", create_keyfile("test-two"));
     }
     #[test]
     fn test_encode() {
         assert_eq!(
-            // Needs to be set to 49833908109710973108 37523108735910971498
-            "11481249678067805698 10695698668367809533",
+            "18900578042804288297 83098297384004287936",
             encode("test_keycode", "Hello World")
         );
     }
@@ -231,9 +187,8 @@ mod tests {
     #[test]
     fn test_decode() {
         assert_eq!(
-            // Needs to decode 49833908109710973108 37523108735910971498
             "hello world",
-            decode("test_keycode", "11481249678067805698 10695698668367809533")
+            decode("test_keycode", "18900578042804288297 83098297384004287936")
         );
     }
     // Should fail if non-code entered

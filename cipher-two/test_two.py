@@ -12,7 +12,7 @@ def test_create_key_file():
 
 def test_encode():
     """Tests the two.encode function"""
-    assert two.encode("test_keycode", "Hello World") == "49833908109710973108 37523108735910971498"
+    assert two.encode("test_keycode", "Hello World") == "18900578042804288297 83098297384004287936"
 
 def test_bad_encode():
     """Tests for bad input"""
@@ -31,6 +31,6 @@ def test_bad_decode():
 def test_bad_key_file():
     """Tests for no encryption key found"""
     with pytest.raises(two.KeyFileNotFoundException) as e_info:
-        two.decode("wrong_keycode", "49833908109710973108 37523108735910971498")
+        two.decode("wrong_keycode", "18900578042804288297 83098297384004287936")
     with pytest.raises(two.KeyFileNotFoundException) as e_info:
         two.encode("wrong_keycode", "Hello World")

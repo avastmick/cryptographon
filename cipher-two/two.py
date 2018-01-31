@@ -38,13 +38,21 @@ def read_key_file(_keyfile):
 def create_key_file(_keyfile):
     """Creates a new key file - note there is NO checking for collisions!!!"""
     alpha = "abcdefghijklmnopqrstuvwxyz"
-
+    keycodes = {}
     # Create new codes, each with an alpha key
-    codes = {c: ''.join(map(str, random.sample(range(10), 4))) for c in alpha}
+    count = 0
+    codes = set()
+    while count < len(alpha): 
+        # Loop here and check for collisions
+        code = ''.join(map(str, random.sample(range(10), 4)))
+        if code not in codes:
+            codes.update(code)
+            keycodes[alpha[count]] = code
+            count += 1
 
     new_keyfile = _keyfile + "_keycode"
     keyfile = open(new_keyfile, "w")
-    keyfile.write(json.dumps(codes))
+    keyfile.write(json.dumps(keycodes))
 
     return new_keyfile
 

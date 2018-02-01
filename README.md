@@ -20,6 +20,10 @@ Turning their cipher into code. You can see that here:
 
 - [Cipher One](cipher-one/README.md)
 
+Let's try it out:
+
+![Cipher-one](../img/cipher-one.gif)
+
 ## Step Two
 
 List out the problems. Think like spies:

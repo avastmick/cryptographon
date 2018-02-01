@@ -22,7 +22,7 @@ Turning their cipher into code. You can see that here:
 
 Let's try it out:
 
-![Cipher-one](../img/cipher-one.gif)
+![Cipher-one](img/cipher-one.gif)
 
 ## Step Two
 

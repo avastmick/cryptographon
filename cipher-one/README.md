@@ -1,6 +1,6 @@
 # Cipher One
 
-The ``cipher-one`` code is based on the girls original paper cipher.
+The ``cipher-one`` code creates a cipher based on the girls original paper code book.
 
 <img src="../img/original.jpg" alt="The Original" width="250" height="200" />
 
@@ -8,7 +8,7 @@ We turned this paper into mini programs that do exactly what your would do with 
 
 ## Python
 
-The quickest to build this in was going to be [Python](https://www.python.org/). 
+The quickest to build this in was going to be [Python](https://www.python.org/).
 
 Python is:
 

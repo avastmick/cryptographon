@@ -10,7 +10,9 @@ Cryptographon is a set of code examples and games to show kids (or adults) the p
 
 **Why?**
 
-My two young girls (then nine and ten-years old) were playing a game. They'd created their own simple [Cipher](https://en.wikipedia.org/wiki/Cipher) where their secret messages were encoded into numbers.
+My two young girls (then nine and ten-years old) were playing a game. They'd created their own simple codebook where their secret messages were encoded into numbers. It was a great idea, but it took them ages to create their messages, they needed a [Cipher](https://en.wikipedia.org/wiki/Cipher)!
+
+<img src="img/original.jpg" alt="The Original" width="250" height="200" />
 
 So, I had an idea. They were very excited about their secrets and making it easier to send their messages. I was very keen on them learning so code. I agreed to set something up so they could write their messages by writing .
 
@@ -22,11 +24,11 @@ Turning their cipher into code. You can see that here:
 
 - [Cipher One](cipher-one/README.md)
 
-Let's try it out:
+Let's try it out. Follow these instructions:
 
 ![Cipher-one](img/cipher-one.gif)
 
-Or, do it online:
+Or, do it online using `trinket.io`:
 
 [On trinket.io](https://trinket.io/embed/python/6569723a94)
 

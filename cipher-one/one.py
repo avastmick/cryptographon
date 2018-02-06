@@ -5,8 +5,6 @@
 # Take a param with the message
 # Interate through the message changing the letters to code, or vice-versa
 
-import argparse
-
 # Regenerate the hash, so know which version this is:
 # echo -n one.py | sha256sum
 VERSION = "1.0, 01-18-2018"
@@ -100,23 +98,6 @@ def find_key(val):
     else:
         return key
 
-def get_hash():
-    """return the sha256 hash for this version and compare with that on commandline"""
+def get_version():
+    """returns the version string"""
     print(VERSION)
-
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Encodes or decodes secret messages")
-    parser.add_argument('action',
-                        help="States whether the message should be encoded or decoded",
-                        choices=["encode", "decode"])
-    parser.add_argument('message', help="The message to encode / decode, (must be in \"quotes\")")
-    parser.add_argument('-v', '--version', help="Returns the sha256 hash for this code", action='version', version=get_hash())
-
-    args = parser.parse_args()
-
-    if args.action == "version":
-        get_hash()
-    elif args.action == "decode":
-        print("Message: " + decode(args.message))
-    elif args.action == "encode":
-        print("Code: " + encode(args.message))

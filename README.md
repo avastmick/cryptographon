@@ -26,6 +26,10 @@ Let's try it out:
 
 ![Cipher-one](img/cipher-one.gif)
 
+Or, do it online:
+
+[On trinket.io](https://trinket.io/embed/python/6569723a94)
+
 ## Step Two
 
 List out the problems. Think like spies:

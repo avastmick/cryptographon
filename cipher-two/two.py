@@ -5,7 +5,6 @@
 # Take a param with the message
 # Interate through the message changing the letters to code, or vice-versa
 
-import argparse
 import json
 import os
 import random
@@ -27,10 +26,10 @@ class KeyFileNotFoundException(Exception):
 
 def read_key_file(_keyfile):
     """Reads an encryption file for look up"""
-    if os.path.isfile(_keyfile):
+    try:
         with open(_keyfile) as _keycodes:
-            key_codes = json.load(_keycodes)
-    else:
+            key_codes = json.loads(_keycodes.read())
+    except:
         raise KeyFileNotFoundException("No encryption key file found. Cannot proceed.")
 
     return key_codes
@@ -109,24 +108,6 @@ def find_key(_keyfile, val):
         return key
 
 def get_version():
-    """Print the version of the code"""
+    """returns the version string"""
     return VERSION
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Encodes or decodes secret messages")
-    parser.add_argument('action',
-                        help="States whether the message should be encoded or decoded, or whether a key should be created.",
-                        choices=["encode", "decode", "new"])
-    parser.add_argument('keyfile', help="The encryption key file to use, or the name of a new key file (e.g. alice-bob)")
-    parser.add_argument('message', nargs='?', help="The message to encode / decode, (must be in \"quotes\")")
-    parser.add_argument('-v', '--version', help="Returns the sha256 hash for this code", action='version', version=get_version())
-
-    args = parser.parse_args()
-    if args.action == "version":
-        print(get_version())
-    elif args.action == "decode":
-        print("Message: " + decode(args.keyfile, args.message))
-    elif args.action == "encode":
-        print("Code: " + encode(args.keyfile, args.message))
-    elif args.action == "new":
-        print("New keycode file: " + create_key_file(args.keyfile))

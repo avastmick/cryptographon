@@ -16,7 +16,7 @@ fn get_rand_code() -> String {
     let n: u32 = rng.gen_range(0, 9999);
     let key = format!("{:04}", n);
 
-    String::from(key)
+    key
 }
 
 /// Creates a new key (CODE) file for the given name
@@ -73,7 +73,7 @@ pub fn get_keyfile(filename: &str) -> HashMap<String, String> {
 
 /// Encode the given message
 ///
-/// assert_eq!("11481249678067805698 10695698668367809533", encode("Hello World"));
+/// `assert_eq!("11481249678067805698 10695698668367809533", encode("Hello World"));`
 pub fn encode(keyfilename: &str, msg: &str) -> String {
     let mut secret = String::new();
     let keycodes = get_keyfile(keyfilename);
@@ -87,7 +87,7 @@ pub fn encode(keyfilename: &str, msg: &str) -> String {
             key.push(c);
             let mut code = String::new();
             if keycodes.contains_key(key.to_lowercase().as_str()) {
-                code.push_str(keycodes.get(key.to_lowercase().as_str()).unwrap());
+                code.push_str(&keycodes[key.to_lowercase().as_str()]);
             }
             if code.trim() == "" {
                 secret = String::from("Encoding failed! Please use only alphabetical values!");
@@ -101,7 +101,7 @@ pub fn encode(keyfilename: &str, msg: &str) -> String {
 
 /// Decode the given message
 ///
-/// assert_eq!("hello world", decode("11481249678067805698 10695698668367809533"));
+/// `assert_eq!("hello world", decode("11481249678067805698 10695698668367809533"));`
 pub fn decode(keyfilename: &str, secret: &str) -> String {
     let mut msg = String::new();
     let mut code = String::new();
@@ -118,7 +118,7 @@ pub fn decode(keyfilename: &str, secret: &str) -> String {
             if code.len() == CODE_LEN {
                 // Look up the key from value
                 let mut key = String::new();
-                for (_key, val) in keycodes.iter() {
+                for (_key, val) in &keycodes {
                     if val == &code {
                         key.push_str(_key);
                     }

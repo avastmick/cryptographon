@@ -20,7 +20,7 @@ So, I had an idea. They were very excited about their secrets and making it easi
 
 ## Step One
 
-Turning their cipher into code. You can see that here:
+Turning their codebook into a cipher using code. You can see that here:
 
 - [Cipher One](cipher-one/README.md)
 

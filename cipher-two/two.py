@@ -15,14 +15,18 @@ VERSION = "1.2, 01-29-2018"
 # The length of the code per letter
 CODE_LEN = 4
 
+
 class EncodingException(Exception):
     """Raise when bad values are passed for encoding"""
+
 
 class DecodingException(Exception):
     """Raise when bad values are passed for encoding"""
 
+
 class KeyFileNotFoundException(Exception):
     """Raise when no encryption key file found"""
+
 
 def read_key_file(_keyfile):
     """Reads an encryption file for look up"""
@@ -30,9 +34,11 @@ def read_key_file(_keyfile):
         with open(_keyfile) as _keycodes:
             key_codes = json.loads(_keycodes.read())
     except:
-        raise KeyFileNotFoundException("No encryption key file found. Cannot proceed.")
+        raise KeyFileNotFoundException(
+            "No encryption key file found. Cannot proceed.")
 
     return key_codes
+
 
 def create_key_file(_keyfile):
     """Creates a new key file - note there is NO checking for collisions!!!"""
@@ -41,7 +47,7 @@ def create_key_file(_keyfile):
     # Create new codes, each with an alpha key
     count = 0
     codes = set()
-    while count < len(alpha): 
+    while count < len(alpha):
         # Loop here and check for collisions
         code = ''.join(map(str, random.sample(range(10), 4)))
         if code not in codes:
@@ -54,6 +60,7 @@ def create_key_file(_keyfile):
     keyfile.write(json.dumps(keycodes))
 
     return new_keyfile
+
 
 def encode(_keyfile, _msg):
     """
@@ -70,9 +77,11 @@ def encode(_keyfile, _msg):
         elif c == ' ':
             output += ' '
         else:
-            raise EncodingException("Encoding failed! Please use only alphabetical values!")
+            raise EncodingException(
+                "Encoding failed! Please use only alphabetical values!")
 
     return output
+
 
 def decode(_keyfile, _secret):
     """
@@ -94,6 +103,7 @@ def decode(_keyfile, _secret):
                 code = ""
     return output
 
+
 # Below this line is just stuff to make the program easier to use
 def find_key(_keyfile, val):
     """return the key of CODE dictionary given the value"""
@@ -107,7 +117,7 @@ def find_key(_keyfile, val):
     else:
         return key
 
+
 def get_version():
     """returns the version string"""
     return VERSION
-

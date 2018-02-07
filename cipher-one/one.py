@@ -12,33 +12,34 @@ VERSION = "1.0, 01-18-2018"
 CODE_LEN = 4
 # A lookup of codes
 CODE = {
-    "a" : "6520",
-    "b" : "2143",
-    "c" : "3990",
-    "d" : "9533",
-    "e" : "1249",
-    "f" : "8942",
-    "g" : "1043",
-    "h" : "1148",
-    "i" : "2397",
-    "j" : "7753",
-    "k" : "6521",
-    "l" : "6780",
-    "m" : "0067",
-    "n" : "1258",
-    "o" : "5698",
-    "p" : "9901",
-    "q" : "9806",
-    "r" : "6683",
-    "s" : "6799",
-    "t" : "5320",
-    "u" : "3118",
-    "v" : "2679",
-    "w" : "1069",
-    "x" : "9001",
-    "y" : "5477",
-    "z" : "9900"
+    "a": "6520",
+    "b": "2143",
+    "c": "3990",
+    "d": "9533",
+    "e": "1249",
+    "f": "8942",
+    "g": "1043",
+    "h": "1148",
+    "i": "2397",
+    "j": "7753",
+    "k": "6521",
+    "l": "6780",
+    "m": "0067",
+    "n": "1258",
+    "o": "5698",
+    "p": "9901",
+    "q": "9806",
+    "r": "6683",
+    "s": "6799",
+    "t": "5320",
+    "u": "3118",
+    "v": "2679",
+    "w": "1069",
+    "x": "9001",
+    "y": "5477",
+    "z": "9900"
 }
+
 
 class EncodingException(Exception):
     """Raise when bad values are passed for encoding"""
@@ -46,6 +47,7 @@ class EncodingException(Exception):
 
 class DecodingException(Exception):
     """Raise when bad values are passed for encoding"""
+
 
 def encode(_msg):
     """
@@ -57,13 +59,15 @@ def encode(_msg):
     output = ""
     for c in _msg:
         if c.lower() in CODE:
-            output += CODE[c.lower()] 
+            output += CODE[c.lower()]
         elif c == ' ':
             output += ' '
         else:
-            raise EncodingException("Encoding failed! Please use only alphabetical values!")
-        
+            raise EncodingException(
+                "Encoding failed! Please use only alphabetical values!")
+
     return output
+
 
 def decode(_code):
     """
@@ -97,6 +101,7 @@ def find_key(val):
         raise DecodingException("Nothing to decode. Bad code!")
     else:
         return key
+
 
 def get_version():
     """returns the version string"""

@@ -8,12 +8,13 @@
 import json
 import os
 import random
+import string
 
 # Regenerate the hash, so know which version this is:
 # echo -n one.py | sha256sum
-VERSION = "1.2, 01-29-2018"
+VERSION = "1.3, 02-07-2018"
 # The length of the code per letter
-CODE_LEN = 4
+CODE_LEN = 6
 
 
 class EncodingException(Exception):
@@ -42,17 +43,17 @@ def read_key_file(_keyfile):
 
 def create_key_file(_keyfile):
     """Creates a new key file - note there is NO checking for collisions!!!"""
-    alpha = "abcdefghijklmnopqrstuvwxyz"
+    lexicon = string.printable
     keycodes = {}
-    # Create new codes, each with an alpha key
+    # Create new codes, each with an lexicon key
     count = 0
     codes = set()
-    while count < len(alpha):
+    while count < len(lexicon):
         # Loop here and check for collisions
         code = ''.join(map(str, random.sample(range(10), CODE_LEN)))
         if code not in codes:
             codes.update(code)
-            keycodes[alpha[count]] = code
+            keycodes[lexicon[count]] = code
             count += 1
 
     new_keyfile = _keyfile + "_keycode"
@@ -72,13 +73,11 @@ def encode(_keyfile, _msg):
     print("Encoding: \"" + _msg + "\"")
     output = ""
     for c in _msg:
-        if c.lower() in key_codes:
-            output += key_codes[c.lower()]
-        elif c == ' ':
-            output += ' '
+        if c in key_codes:
+            output += key_codes[c]
         else:
             raise EncodingException(
-                "Encoding failed! Please use only alphabetical values!")
+                "Encoding failed! Please use only ascii values!")
 
     return output
 
@@ -93,10 +92,7 @@ def decode(_keyfile, _secret):
     output = ""
     code = ""
     for c in _secret:
-        if c == " ":
-            output += c
-            code = ""
-        elif len(code) < CODE_LEN:
+        if len(code) < CODE_LEN:
             code += c
             if len(code) == CODE_LEN:
                 output += find_key(_keyfile, code)

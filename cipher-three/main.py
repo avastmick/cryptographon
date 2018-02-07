@@ -1,7 +1,9 @@
+import sys
 import argparse
-import two
+import three
 
-if __name__ == '__main__':
+
+def parse_args(args):
     parser = argparse.ArgumentParser(
         description="Encodes or decodes secret messages")
     parser.add_argument(
@@ -21,16 +23,19 @@ if __name__ == '__main__':
     parser.add_argument(
         '-v',
         '--version',
-        help="Returns the sha256 hash for this code",
+        help="Returns the version of this code",
         action='version',
-        version=two.get_version())
+        version=three.get_version())
+    return parser.parse_args(args)
 
-    args = parser.parse_args()
+
+if __name__ == '__main__':
+    args = parse_args(sys.argv[1:])
     if args.action == "version":
-        print(two.get_version())
+        print(three.get_version())
     elif args.action == "decode":
-        print("Message: " + two.decode(args.keyfile, args.message))
+        print("Message: " + three.decode(args.keyfile, args.message))
     elif args.action == "encode":
-        print("Code: " + two.encode(args.keyfile, args.message))
+        print("Code: " + three.encode(args.keyfile, args.message))
     elif args.action == "new":
-        print("New keycode file: " + two.create_key_file(args.keyfile))
+        print("New keycode file: " + three.create_key_file(args.keyfile))

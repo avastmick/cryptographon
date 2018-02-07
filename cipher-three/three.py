@@ -75,11 +75,9 @@ def encode(_keyfile, _msg):
     for c in _msg:
         if c in key_codes:
             output += key_codes[c]
-        elif c == ' ':
-            output += ' '
         else:
             raise EncodingException(
-                "Encoding failed! Please use only lexiconbetical values!")
+                "Encoding failed! Please use only ascii values!")
 
     return output
 

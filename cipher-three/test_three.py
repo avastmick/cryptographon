@@ -17,27 +17,27 @@ def test_create_key_file():
 def test_encode():
     """Tests the three.encode function"""
     assert three.encode(
-        "test_keycode", "Hello World!"
+        "test3_keycode", "Hello World!"
     ) == "867329260437960514960514180364036524194068180364438195960514789640104968"
 
 
 def test_bad_encode():
     """Tests for bad input"""
     with pytest.raises(three.EncodingException) as e_info:
-        three.encode("test_keycode", "\xc4 \xc4")  # passing non-ascii chars
+        three.encode("test3_keycode", "\xc4 \xc4")  # passing non-ascii chars
 
 
 def test_decode():
     """Tests the three.decode() function - going to three ways."""
-    assert three.decode("test_keycode",
-                        three.encode("test_keycode",
+    assert three.decode("test3_keycode",
+                        three.encode("test3_keycode",
                                      "Hello World!")) == "Hello World!"
 
 
 def test_bad_decode():
     """Tests for bad input"""
     with pytest.raises(three.DecodingException) as e_info:
-        three.decode("test_keycode", "1234 5678 9012")
+        three.decode("test3_keycode", "1234 5678 9012")
 
 
 def test_bad_key_file():

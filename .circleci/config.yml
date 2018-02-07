@@ -16,7 +16,6 @@ jobs:
           command: |
             pip install tox
             tox
-            bash <(curl -s https://codecov.io/bash)
       - save_cache:
           key: py-project-cache
           paths:

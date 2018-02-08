@@ -39,3 +39,5 @@ if __name__ == '__main__':
         print("Code: " + three.encode(args.keyfile, args.message))
     elif args.action == "new":
         print("New keycode file: " + three.create_key_file(args.keyfile))
+    else:
+        pass

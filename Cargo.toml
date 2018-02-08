@@ -7,5 +7,6 @@ authors = ["avastmick <avastmick@outlook.com>"]
 
 cipher-one = { path = "cipher-one" }
 cipher-two = { path = "cipher-two" }
+cipher-three = { path = "cipher-three" }
 
 [workspace]

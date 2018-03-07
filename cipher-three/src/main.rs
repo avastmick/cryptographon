@@ -11,7 +11,7 @@ fn main() {
         .arg(
             Arg::with_name("KEY")
                 .help("The name of the key file")
-                .required(true)
+                .required(true),
         )
         .arg(
             Arg::with_name("encode")

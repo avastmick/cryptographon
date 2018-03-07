@@ -57,3 +57,34 @@ fn main() {
         panic!("Nothing in the message!")
     }
 }
+
+extern crate assert_cli;
+
+#[cfg(test)]
+mod tests {
+
+    use assert_cli::Assert;
+
+    #[test]
+    fn test_help() {
+        Assert::main_binary()
+            .with_args(&["--help"])
+            .succeeds()
+            .unwrap();
+    }
+
+    #[test]
+    fn test_fail_no_params() {
+        Assert::main_binary().fails().unwrap();
+    }
+
+    #[test]
+    fn test_key_create() {
+        Assert::main_binary()
+            .with_args(&["test", "--new"])
+            .succeeds()
+            .stdout()
+            .contains("test_keycode")
+            .unwrap();
+    }
+}

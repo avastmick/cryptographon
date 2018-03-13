@@ -35,3 +35,17 @@ Compiled languages are also faster to run, and in the case of Rust safer as it a
 - What are the problems with ``cipher-one``?
 - How can we improve it?
 - What else must it do for it to be really secure?
+
+## How do we crack the code?
+
+First, we need to know what the ciphertext looks like and see if we can work out if there are any patterns in in.
+
+Because we can open the code up, say## How do we crack the code? First, we need to know what the ciphertext looks like and see if we can work out if there are any patterns in in. Because we can open the code up, say `one.py`, and see how it works, we could cheat. But, we don't want to, do we?
+
+Let's just look at some ciphertext and see what we can do with it.
+
+```bash
+
+```
+
+This is a fairly long piece of text that should give us some clues as to the underlying plaintext.

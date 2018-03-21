@@ -1,5 +1,8 @@
+extern crate colored;
 extern crate rand;
 extern crate serde_json;
+
+use colored::Colorize;
 
 use std::error::Error;
 use std::io::prelude::*;
@@ -58,7 +61,10 @@ pub fn create_keyfile(name: &str) -> String {
 
     match file.write_all(j.unwrap().as_bytes()) {
         Err(why) => panic!("Couldn't write to {}: {}", display, why.description()),
-        Ok(_) => println!("Successfully wrote to {}", display),
+        Ok(_) => println!(
+            "
+    Wrote new key file"
+        ),
     }
     // Return path to new file
     String::from(path.file_name().unwrap().to_str().unwrap())
@@ -66,7 +72,11 @@ pub fn create_keyfile(name: &str) -> String {
 
 /// Gets a keyfile for a given filename
 pub fn get_keyfile(filename: &str) -> HashMap<String, String> {
-    println!("Getting keyfile for {}", filename);
+    println!(
+        "
+    Using keyfile: {}",
+        filename.green()
+    );
     let mut f = File::open(filename).expect("File not found");
 
     let mut contents = String::new();
@@ -85,6 +95,11 @@ pub fn get_keyfile(filename: &str) -> HashMap<String, String> {
 pub fn encode(keyfilename: &str, msg: &str) -> String {
     let mut secret = String::new();
     let keycodes = get_keyfile(keyfilename);
+    println!(
+        "
+    Got message: {}",
+        msg.purple()
+    );
     // Iterate through the message
     for c in msg.chars() {
         // get code and add to secret
@@ -113,7 +128,7 @@ pub fn decode(keyfilename: &str, secret: &str) -> String {
     println!(
         "
     Got secret: {}",
-        secret
+        secret.yellow()
     );
     for c in secret.chars() {
         code.push(c);
@@ -136,34 +151,6 @@ pub fn decode(keyfilename: &str, secret: &str) -> String {
         }
     }
     msg
-}
-
-pub fn usage() {
-    println!(
-        "usage: main.py [-h] {{encode,decode,new}} keyfile [message]
-
-Encodes or decodes secret messages
-
-positional arguments:
-  {{encode,decode,new}}  States whether the message should be encoded or
-                       decoded, or whether a new key should be created.
-  keyfile              The encryption key file to use, or the name of a new
-                       key file (e.g. alice-bob)
-  message              The message to encode / decode, (must be in single \'quotes\')
-
-optional arguments:
-  -h, --help           show this help message and exit"
-    );
-}
-
-pub fn print_out(msg: String) {
-    println!(
-        "
-    **********************************************************
-    {}
-    **********************************************************",
-        msg
-    );
 }
 
 #[cfg(test)]

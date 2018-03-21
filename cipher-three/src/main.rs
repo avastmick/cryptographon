@@ -1,6 +1,8 @@
 extern crate cipher_three;
 extern crate clap;
+extern crate colored;
 
+use colored::Colorize;
 use clap::{App, Arg};
 
 fn main() {
@@ -40,19 +42,20 @@ fn main() {
         .get_matches();
 
     if let Some(plaintext) = matches.value_of("encode") {
-        cipher_three::print_out(cipher_three::encode(
-            matches.value_of("KEY").unwrap(),
-            plaintext,
-        ));
+        println!(
+            "\tCiphertext: {}",
+            cipher_three::encode(matches.value_of("KEY").unwrap(), plaintext,).yellow()
+        );
     } else if let Some(ciphertext) = matches.value_of("decode") {
-        cipher_three::print_out(cipher_three::decode(
-            matches.value_of("KEY").unwrap(),
-            ciphertext,
-        ));
+        println!(
+            "\tPlaintext: {}",
+            cipher_three::decode(matches.value_of("KEY").unwrap(), ciphertext,).purple()
+        );
     } else if matches.is_present("new") {
-        cipher_three::print_out(cipher_three::create_keyfile(
-            matches.value_of("KEY").unwrap(),
-        ));
+        println!(
+            "\tNew keyfile name: {}",
+            cipher_three::create_keyfile(matches.value_of("KEY").unwrap(),).green()
+        );
     } else {
         panic!("Nothing in the message!")
     }
